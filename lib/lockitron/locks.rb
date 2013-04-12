@@ -35,7 +35,7 @@ module Lockitron
     end
     
     
-    def self.status(lock)
+    def self.get_status(lock)
       url = "#{LOCKS_URL}/#{lock['id']}/"
       RestClient.post url, :access_token => access_token do |response|
         if response.code == 200
