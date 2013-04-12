@@ -33,7 +33,26 @@ module Lockitron
       @@lock = find(name)
       access(@@lock, "lock")
     end
-
+    
+    
+    def self.status(lock)
+      url = "#{LOCKS_URL}/#{lock['id']}/"
+      RestClient.post url, :access_token => access_token do |response|
+        if response.code == 200
+          puts response
+          puts response["status"]
+          return response["status"]
+        elsif response.code == 401
+          invalid_access_token!
+        else
+          puts "An unknown error ocurred. Please send an email to jarred@lockitron.com and tell him what happened."
+        end
+      end
+    end
+    
+    
+    
+    
     def self.access(lock, direction)
       url = "#{LOCKS_URL}/#{lock['id']}/#{direction}"
       RestClient.post url, :access_token => access_token do |response|
